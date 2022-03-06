@@ -21,7 +21,7 @@ to the demand. For this purpose, the system manages electric meters, electric ca
 - [simulator](simulator): Simulator to test the services (NestJS, TypeScript).
 - [tests](tests): Acceptance tests (Cucumber.js, TypeScript).
 - [postman](postman): Postman collection and environment.
-- [deliverables](deliverables): Project deliverables.
+- [docs](docs): Project documentation.
 
 ## Requirements
 
