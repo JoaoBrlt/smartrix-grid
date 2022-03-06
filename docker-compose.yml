@@ -1,0 +1,332 @@
+version: "3.9"
+
+services:
+  #
+  # KAFKA
+  #
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      - ZOO_PORT_NUMBER=${ZOOKEEPER_PORT}
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "${ZOOKEEPER_PORT}:${ZOOKEEPER_PORT}"
+    restart: unless-stopped
+
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:${INTERNAL_KAFKA_PORT},EXTERNAL://:${EXTERNAL_KAFKA_PORT}
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:${INTERNAL_KAFKA_PORT},EXTERNAL://localhost:${EXTERNAL_KAFKA_PORT}
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:${ZOOKEEPER_PORT}
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    ports:
+      - "${EXTERNAL_KAFKA_PORT}:${EXTERNAL_KAFKA_PORT}"
+    depends_on:
+      - zookeeper
+    restart: unless-stopped
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:${ZOOKEEPER_PORT}
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:${INTERNAL_KAFKA_PORT}
+      - LOGGING_LEVEL_ROOT=error
+      - LOGGING_LEVEL_COM_PROVECTUS=error
+    ports:
+      - "${KAFKA_UI_PORT}:${KAFKA_UI_PORT}"
+    depends_on:
+      - kafka
+    restart: unless-stopped
+
+  #
+  # DATABASE
+  #
+
+  database:
+    image: postgres:alpine
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DATABASE_NAME} -U ${DATABASE_USERNAME} -p ${DATABASE_PORT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: "-p ${DATABASE_PORT}"
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    restart: unless-stopped
+
+  #
+  # SERVICES
+  #
+
+  household-metrics-writer:
+    build: services/household-metrics-writer
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${HOUSEHOLD_METRICS_WRITER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${HOUSEHOLD_METRICS_WRITER_PORT}:${HOUSEHOLD_METRICS_WRITER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  household-metrics-reader:
+    build: services/household-metrics-reader
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${HOUSEHOLD_METRICS_READER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${HOUSEHOLD_METRICS_READER_PORT}:${HOUSEHOLD_METRICS_READER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  production-writer:
+    build: services/production-writer
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${PRODUCTION_WRITER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${PRODUCTION_WRITER_PORT}:${PRODUCTION_WRITER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  production-evaluator:
+    build: services/production-evaluator
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${PRODUCTION_EVALUATOR_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${PRODUCTION_EVALUATOR_PORT}:${PRODUCTION_EVALUATOR_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  consumption-regulator:
+    build: services/consumption-regulator
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${CONSUMPTION_REGULATOR_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${CONSUMPTION_REGULATOR_PORT}:${CONSUMPTION_REGULATOR_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  customer-registry:
+    build: services/customer-registry
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${CUSTOMER_REGISTRY_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${CUSTOMER_REGISTRY_PORT}:${CUSTOMER_REGISTRY_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  community-manager:
+    build: services/community-manager
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${COMMUNITY_MANAGER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${COMMUNITY_MANAGER_PORT}:${COMMUNITY_MANAGER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  production-reader:
+    build: services/production-reader
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${PRODUCTION_READER_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${PRODUCTION_READER_PORT}:${PRODUCTION_READER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  meter-controller-mock:
+    build: services/meter-controller-mock
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${METER_CONTROLLER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+      - SIMULATOR_HOST=${SIMULATOR_HOST}
+      - SIMULATOR_PORT=${SIMULATOR_PORT}
+    ports:
+      - "${METER_CONTROLLER_PORT}:${METER_CONTROLLER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  invoice-issuer:
+    build: services/invoice-issuer
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${INVOICE_ISSUER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+      - HOUSEHOLD_METRICS_READER_HOST=household-metrics-reader
+      - HOUSEHOLD_METRICS_READER_PORT=${HOUSEHOLD_METRICS_READER_PORT}
+    ports:
+      - "${INVOICE_ISSUER_PORT}:${INVOICE_ISSUER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  invoice-reader:
+    build: services/invoice-reader
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${INVOICE_READER_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${INVOICE_READER_PORT}:${INVOICE_READER_PORT}"
+    depends_on:
+      - database
+    restart: unless-stopped
+
+  price-estimator:
+    build: services/price-estimator
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${PRICE_ESTIMATOR_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${PRICE_ESTIMATOR_PORT}:${PRICE_ESTIMATOR_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  household-metrics-calculator:
+    build: services/household-metrics-calculator
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${HOUSEHOLD_METRICS_CALCULATOR_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - COMMUNITY_MANAGER_HOST=community-manager
+      - COMMUNITY_MANAGER_PORT=${COMMUNITY_MANAGER_PORT}
+    ports:
+      - "${HOUSEHOLD_METRICS_CALCULATOR_PORT}:${HOUSEHOLD_METRICS_CALCULATOR_PORT}"
+    depends_on:
+      - kafka
+    restart: unless-stopped
+
+  payment-processor:
+    build: services/payment-processor
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${PAYMENT_PROCESSOR_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${PAYMENT_PROCESSOR_PORT}:${PAYMENT_PROCESSOR_PORT}"
+    depends_on:
+      - kafka
+    restart: unless-stopped
+
+  consumption-notifier:
+    build: services/consumption-notifier
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${CONSUMPTION_NOTIFIER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+      - MAIL_SERVER_HOST=mail-server
+      - MAIL_SERVER_PORT=${MAIL_SERVER_PORT}
+    ports:
+      - "${CONSUMPTION_NOTIFIER_PORT}:${CONSUMPTION_NOTIFIER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  #
+  # EXTERNAL SERVICES
+  #
+
+  mail-server:
+    build: external/mail-server
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${MAIL_SERVER_PORT}
+      - KAFKA_URL=kafka:${INTERNAL_KAFKA_PORT}
+      - DATABASE_URL=postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@database:${DATABASE_PORT}/${DATABASE_NAME}
+    ports:
+      - "${MAIL_SERVER_PORT}:${MAIL_SERVER_PORT}"
+    depends_on:
+      - database
+      - kafka
+    restart: unless-stopped
+
+  #
+  # TESTS
+  #
+
+  simulator:
+    build: simulator
+    environment:
+      - TZ=${APPLICATION_TIMEZONE}
+      - PORT=${SIMULATOR_PORT}
+      - HOUSEHOLD_METRICS_WRITER_HOST=household-metrics-writer
+      - HOUSEHOLD_METRICS_WRITER_PORT=${HOUSEHOLD_METRICS_WRITER_PORT}
+      - PRODUCTION_WRITER_HOST=production-writer
+      - PRODUCTION_WRITER_PORT=${PRODUCTION_WRITER_PORT}
+      - PRODUCTION_EVALUATOR_HOST=production-evaluator
+      - PRODUCTION_EVALUATOR_PORT=${PRODUCTION_EVALUATOR_PORT}
+      - COMMUNITY_MANAGER_HOST=community-manager
+      - COMMUNITY_MANAGER_PORT=${COMMUNITY_MANAGER_PORT}
+      - METER_CONTROLLER_HOST=meter-controller-mock
+      - METER_CONTROLLER_PORT=${METER_CONTROLLER_PORT}
+      - HOUSEHOLD_METRICS_CALCULATOR_HOST=household-metrics-calculator
+      - HOUSEHOLD_METRICS_CALCULATOR_PORT=${HOUSEHOLD_METRICS_CALCULATOR_PORT}
+    ports:
+      - "${SIMULATOR_PORT}:${SIMULATOR_PORT}"
+    depends_on:
+      - household-metrics-writer
+      - production-writer
+      - production-evaluator
+      - community-manager
+      - meter-controller-mock
+      - household-metrics-calculator
+    restart: unless-stopped

@@ -1,0 +1,86 @@
+entity: HouseholdMetrics
+items:
+  record-1:
+    customerId: 1
+    consumption: 787
+    boughtConsumption: 0
+    production: 1817
+    soldProduction: 1030
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T08:00:00Z'
+  record-2:
+    customerId: 1
+    consumption: 1957
+    boughtConsumption: 845
+    production: 1112
+    soldProduction: 0
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T08:30:00Z'
+  record-3:
+    customerId: 1
+    consumption: 47
+    boughtConsumption: 0
+    production: 861
+    soldProduction: 814
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T09:00:00Z'
+  record-4:
+    customerId: 1
+    consumption: 1972
+    boughtConsumption: 1489
+    production: 483
+    soldProduction: 0
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T09:30:00Z'
+  record-5:
+    customerId: 1
+    consumption: 825
+    boughtConsumption: 663
+    production: 163
+    soldProduction: 0
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T10:00:00Z'
+  record-6:
+    customerId: 1
+    consumption: 837
+    boughtConsumption: 0
+    production: 1434
+    soldProduction: 597
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T10:30:00Z'
+  record-7:
+    customerId: 1
+    consumption: 402
+    boughtConsumption: 0
+    production: 854
+    soldProduction: 452
+    batteryUsage: 0
+    currentBattery: 0
+    maxBattery: 0
+    purchasePrice: 0.1821
+    sellingPrice: 0.1726
+    date: '2021-01-01T11:00:00Z'

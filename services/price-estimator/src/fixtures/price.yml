@@ -1,0 +1,33 @@
+entity: Price
+items:
+  price1:
+    price: 8
+    date: '2021-10-01T08:00:00Z'
+  price2:
+    price: 12
+    date: '2021-10-01T09:00:00Z'
+  price3:
+    price: 42
+    date: '2021-10-01T10:00:00Z'
+  price4:
+    price: .75
+    date: '2021-10-03T08:00:00Z'
+  price5:
+    price: 3.14
+    date: '2021-10-03T17:00:00Z'
+  price6:
+    price: 4
+    date: '2021-10-05T08:00:00Z'
+  price7:
+    price: 5.5
+    date: '2021-10-08T09:00:00Z'
+  price8:
+    price: 9.387
+    date: '2021-10-09T23:00:00Z'
+  price9:
+    price: 42
+    date: '2021-10-10T18:00:00Z'
+  price10:
+    price: 8
+    date: '2021-10-12T17:00:00Z'
+
