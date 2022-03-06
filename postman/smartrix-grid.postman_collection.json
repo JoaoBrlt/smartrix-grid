@@ -1,0 +1,831 @@
+{
+	"info": {
+		"_postman_id": "4cf45c4e-9d32-4cf7-b0a7-a3b1b523a320",
+		"name": "smartrix-grid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Household metrics writer",
+			"item": [
+				{
+					"name": "Provide household metrics",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"consumption\": 10,\n    \"production\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{household-metrics-writer}}/household-metrics-writer",
+							"host": [
+								"{{household-metrics-writer}}"
+							],
+							"path": [
+								"household-metrics-writer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provide household metrics for a given date",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"consumption\": 10,\n    \"production\": 15,\n    \"date\": \"2021-01-01T08:00:00.000Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{household-metrics-writer}}/household-metrics-writer",
+							"host": [
+								"{{household-metrics-writer}}"
+							],
+							"path": [
+								"household-metrics-writer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Load the fixtures",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"consumption\": 10,\n    \"production\": 15,\n    \"date\": \"2021-01-01T08:00:00.000Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{household-metrics-writer}}/household-metrics-writer/fixtures",
+							"host": [
+								"{{household-metrics-writer}}"
+							],
+							"path": [
+								"household-metrics-writer",
+								"fixtures"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clear the database",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"consumption\": 10,\n    \"production\": 15,\n    \"date\": \"2021-01-01T08:00:00.000Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{household-metrics-writer}}/household-metrics-writer/clear",
+							"host": [
+								"{{household-metrics-writer}}"
+							],
+							"path": [
+								"household-metrics-writer",
+								"clear"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Household metrics reader",
+			"item": [
+				{
+					"name": "Customers",
+					"item": [
+						{
+							"name": "Get the metrics of a customer",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/customers/1",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"customers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a customer for a given day",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/customers/1/days/2021-01-01",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"customers",
+										"1",
+										"days",
+										"2021-01-01"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a customer for a given month",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/customers/1/months/2021-01",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"customers",
+										"1",
+										"months",
+										"2021-01"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a customer for a given year",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/customers/1/years/2021",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"customers",
+										"1",
+										"years",
+										"2021"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Communities",
+					"item": [
+						{
+							"name": "Get the latest metrics of all the communities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/communities",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"communities"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a community",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/communities/1",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"communities",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a community for a given day",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/communities/1/days/2021-01-01",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"communities",
+										"1",
+										"days",
+										"2021-01-01"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a community for a given month",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/communities/1/months/2021-01",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"communities",
+										"1",
+										"months",
+										"2021-01"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the metrics of a community for a given year",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{household-metrics-reader}}/household-metrics-reader/communities/1/years/2021",
+									"host": [
+										"{{household-metrics-reader}}"
+									],
+									"path": [
+										"household-metrics-reader",
+										"communities",
+										"1",
+										"years",
+										"2021"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get global household metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{household-metrics-reader}}/household-metrics-reader",
+							"host": [
+								"{{household-metrics-reader}}"
+							],
+							"path": [
+								"household-metrics-reader"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get global household metrics for a given day",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{household-metrics-reader}}/household-metrics-reader/days/2021-01-01",
+							"host": [
+								"{{household-metrics-reader}}"
+							],
+							"path": [
+								"household-metrics-reader",
+								"days",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get global household metrics for a given month",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{household-metrics-reader}}/household-metrics-reader/months/2021-01",
+							"host": [
+								"{{household-metrics-reader}}"
+							],
+							"path": [
+								"household-metrics-reader",
+								"months",
+								"2021-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get global household metrics for a given year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{household-metrics-reader}}/household-metrics-reader/years/2021",
+							"host": [
+								"{{household-metrics-reader}}"
+							],
+							"path": [
+								"household-metrics-reader",
+								"years",
+								"2021"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Production writer",
+			"item": [
+				{
+					"name": "Provide power plant production",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 1500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{production-writer}}/production-writer",
+							"host": [
+								"{{production-writer}}"
+							],
+							"path": [
+								"production-writer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provide power plant production for a given date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 2455,\r\n    \"date\": \"2021-01-01T08:00:00.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{production-writer}}/production-writer",
+							"host": [
+								"{{production-writer}}"
+							],
+							"path": [
+								"production-writer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Clear the database",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"consumption\": 10,\n    \"production\": 15,\n    \"date\": \"2021-01-01T08:00:00.000Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{production-writer}}/production-writer/clear",
+							"host": [
+								"{{production-writer}}"
+							],
+							"path": [
+								"production-writer",
+								"clear"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Production evaluator",
+			"item": [
+				{
+					"name": "Evaluate the next production",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has a valid body\", function () {",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json;",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-evaluator}}/production-evaluator/next",
+							"host": [
+								"{{production-evaluator}}"
+							],
+							"path": [
+								"production-evaluator",
+								"next"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Production reader",
+			"item": [
+				{
+					"name": "Check the total production",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-reader}}/production-reader/total-production",
+							"host": [
+								"{{production-reader}}"
+							],
+							"path": [
+								"production-reader",
+								"total-production"
+							]
+						},
+						"description": "Check total production"
+					},
+					"response": []
+				},
+				{
+					"name": "Check the total production for today",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-reader}}/production-reader/total-production/today",
+							"host": [
+								"{{production-reader}}"
+							],
+							"path": [
+								"production-reader",
+								"total-production",
+								"today"
+							]
+						},
+						"description": "Check today total production"
+					},
+					"response": []
+				},
+				{
+					"name": "Check the total production for a given date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-reader}}/production-reader/total-production/day?date=2021-01-01",
+							"host": [
+								"{{production-reader}}"
+							],
+							"path": [
+								"production-reader",
+								"total-production",
+								"day"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2021-01-01"
+								}
+							]
+						},
+						"description": "Check 2021-09-25 total production"
+					},
+					"response": []
+				},
+				{
+					"name": "Check the total production for a given month",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-reader}}/production-reader/total-production/month?date=2021-01",
+							"host": [
+								"{{production-reader}}"
+							],
+							"path": [
+								"production-reader",
+								"total-production",
+								"month"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2021-01"
+								}
+							]
+						},
+						"description": "Check 2021-08 total production"
+					},
+					"response": []
+				},
+				{
+					"name": "Check the total production for a given year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{production-reader}}/production-reader/total-production/year?date=2020",
+							"host": [
+								"{{production-reader}}"
+							],
+							"path": [
+								"production-reader",
+								"total-production",
+								"year"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2020"
+								}
+							]
+						},
+						"description": "Check 2021 total production"
+					},
+					"response": []
+				}
+			],
+			"description": "production-reader"
+		},
+		{
+			"name": "Customer registry",
+			"item": [
+				{
+					"name": "Create a customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer\": \"Charly\",\n    \"paymentInfo\": \"CarteBleueCharly\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer-registry}}/customer-registry/customer-creation",
+							"host": [
+								"{{customer-registry}}"
+							],
+							"path": [
+								"customer-registry",
+								"customer-creation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find a customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{customer-registry}}/customer-registry/customer/1",
+							"host": [
+								"{{customer-registry}}"
+							],
+							"path": [
+								"customer-registry",
+								"customer",
+								"1"
+							]
+						},
+						"description": "Get customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Update a customer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer\": \"Quentin\",\n    \"paymentInfo\": \"CarteBleueCharly\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{customer-registry}}/customer-registry/customer-update/1",
+							"host": [
+								"{{customer-registry}}"
+							],
+							"path": [
+								"customer-registry",
+								"customer-update",
+								"1"
+							]
+						},
+						"description": "Update customer\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{customer-registry}}/customer-registry/customer-remove/1",
+							"host": [
+								"{{customer-registry}}"
+							],
+							"path": [
+								"customer-registry",
+								"customer-remove",
+								"1"
+							]
+						},
+						"description": "Remove customer"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Community manager",
+			"item": [
+				{
+					"name": "Assign a customer to a community",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": 1,\n    \"communityId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{community-manager}}/assigner/store",
+							"host": [
+								"{{community-manager}}"
+							],
+							"path": [
+								"assigner",
+								"store"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invoice issuer",
+			"item": [
+				{
+					"name": "Get an invoice ",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{invoice-issuer}}/invoice-issuer/6/2021-09",
+							"host": [
+								"{{invoice-issuer}}"
+							],
+							"path": [
+								"invoice-issuer",
+								"6",
+								"2021-09"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
