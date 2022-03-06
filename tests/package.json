@@ -1,0 +1,49 @@
+{
+  "name": "tests",
+  "version": "0.0.1",
+  "description": "Tests",
+  "contributors": [
+    {
+      "name" : "João Brilhante",
+      "url" : "https://github.com/JoaoBrlt"
+    },
+    {
+      "name" : "Enzo Briziarelli",
+      "url" : "https://github.com/enbriziare"
+    },
+    {
+      "name" : "Charly Ducrocq",
+      "url" : "https://github.com/CharlyDucrocq"
+    },
+    {
+      "name" : "Quentin Larose",
+      "url" : "https://github.com/QuentinLarose"
+    },
+    {
+      "name" : "Ludovic Marti",
+      "url" : "https://github.com/LudovicMarti"
+    }
+  ],
+  "private": true,
+  "license": "GPLV3",
+  "scripts": {
+    "test": "cucumber-js -p default",
+    "price_up": "cucumber-js --tags @price_up",
+    "cars_night": "cucumber-js --tags @cars_night",
+    "regulation_cycle": "cucumber-js --tags @regulation_cycle"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^7.3.1",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
+    "@types/chai": "^4.2.22",
+    "@types/luxon": "^2.0.4",
+    "@types/node": "^16.10.2",
+    "axios": "^0.22.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "luxon": "^2.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3",
+    "winston": "^3.3.3"
+  }
+}
